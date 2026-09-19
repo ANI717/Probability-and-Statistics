@@ -133,22 +133,22 @@ class StatCalculator:
         mean_value = self.mean
         return [(x - mean_value) / self.standard_deviation for x in self._values]
 
-    @property
-    def percentiles(self):
-        def _percentile(percentile: float):
-            if not self._values:
-                return 0
-            sorted_values = sorted(self._values)
-            k = (len(sorted_values) - 1) * (percentile / 100)
-            f = int(k)
-            c = f + 1
-            if c >= len(sorted_values):
-                return sorted_values[f]
-            d0 = sorted_values[f] * (c - k)
-            d1 = sorted_values[c] * (k - f)
-            return d0 + d1
+    def percentiles(self, percentile: float):
+        if not self._values:
+            return 0
 
-        return _percentile
+        sorted_values = sorted(self._values)
+        k = (len(sorted_values) - 1) * (percentile / 100)
+        f = int(k)
+        c = f + 1
+
+        if c >= len(sorted_values):
+            return sorted_values[f]
+
+        d0 = sorted_values[f] * (c - k)
+        d1 = sorted_values[c] * (k - f)
+
+        return d0 + d1
 
 
 if __name__ == "__main__":
